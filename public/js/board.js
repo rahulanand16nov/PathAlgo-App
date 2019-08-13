@@ -1,6 +1,7 @@
 function Node(id, status) {
     this.id = id;
     this.status = status;
+    this.astarFCost = null;
   }
 
 // Required Global Data
@@ -11,8 +12,8 @@ var width;
 function initialize(h,w){
   height = h;
   width = w;
-  window.startId = "row:0-col:0";
-  window.endId = `row:${height-1}-col:${width-1}`;
+  window.startId = "0-0";
+  window.endId = `${height-1}-${width-1}`;
   createGrid(height,width);
   eventListeners(height,width);
 }
@@ -25,7 +26,7 @@ createGrid = function(height,width){
     let currentHTMLRow = `<tr id="row ${r}">`;
     this.nodes={};
     for (let c = 0; c < width; c++) {
-      let newNodeId = `row:${r}-col:${c}`, newNodeClass, newNode;
+      let newNodeId = `${r}-${c}`, newNodeClass, newNode;
       if(r===0 && c===0){
         newNodeClass = "start"
       } else if (r===height-1 && c === width-1){
@@ -49,10 +50,8 @@ createGrid = function(height,width){
 eventListeners = function(height,width){
     for(let r=0;r<height;r++){
         for(let c=0;c<width;c++){
-            let currentId = `row:${r}-col:${c}`;
+            let currentId = `${r}-${c}`;
             let currentElement = document.getElementById(currentId);
-
-
 
             let ctrldown = false;
             let sdown = false;
@@ -60,39 +59,43 @@ eventListeners = function(height,width){
 
             currentElement.addEventListener('mousedown',(e)=>{
 
+              // Changing position of start node
               if(currentElement.className === "unvisited" && sdown === true){
                 document.getElementById(startId).className = "unvisited";
                 startId = currentId;
                 currentElement.className = "start";
+                boardArray[r][c].status = "start";
               }
 
+              // Changing position of end node
               if(currentElement.className === "unvisited" && edown === true){
-                console.log(endId);
                 document.getElementById(endId).className = "unvisited";
                 endId = currentId;
                 currentElement.className = "end";
+                boardArray[r][c].status = "end";
               } 
 
+              // Adding bricks
               if(currentId!==startId && currentId !== endId && currentElement.className!=="brick" && e.which===1 && sdown===false){
                 currentElement.className="brick";
-                //console.log(`Added a brick to ${boardArray[r][c].id}`);
+                boardArray[r][c].status = "brick";
               }
 
+              // Removing bricks 
               if(currentElement.className === "brick" && ctrldown === true){
                 currentElement.className = "unvisited";
-                //console.log(`Removed brick from ${boardArray[r][c].id}`)
+                boardArray[r][c].status = "unvisited";
               }
 
             });
 
+            // Handling keystrokes
             $(document).on({
               keydown: (e)=>{
                 e.preventDefault();
-                // If ctrl key is pressed
                 if(e.which===17){
                   ctrldown=true;
                 }
-                //if 's'is pressed
                 if(e.which===83){
                   sdown = true;
                 }
@@ -102,11 +105,9 @@ eventListeners = function(height,width){
                 }
               },
               keyup: (e)=>{
-              // If ctrl key is pressed
               if(e.which===17){
                 ctrldown=false;
               }
-              //if 's'is pressed
               if(e.which===83){
                 sdown = false;
               }
@@ -119,3 +120,4 @@ eventListeners = function(height,width){
         }
     }
 }
+
