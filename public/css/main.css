@@ -55,6 +55,42 @@ table {
   }
 }
 
+
+.shortestPath{
+  animation-name: shortestPathAnimation;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+
+@keyframes shortestPathAnimation {
+  0% {
+    transform: scale(.3);
+    background-color: rgba(229, 255, 0, 0);
+    border-radius: 100%;
+  }
+
+  50% {
+    background-color: rgba(229, 255, 0, 0.5);
+  }
+
+  75% {
+    transform: scale(1.2);
+    background-color: rgba(229, 255, 0, 0.75);
+  }
+
+  100% {
+    transform: scale(1.0);
+    background-color: rgba(229, 255, 0, 1.0);
+  }
+}
+
+
 .start{
   background-color: blue;
 }
