@@ -9,6 +9,7 @@ function Node(id, status) {
   }
 
 // Required Global Data
+var algo = "Astar";
 var boardArray = [];
 var height;
 var width;
@@ -31,8 +32,18 @@ function clearPath(){
         document.getElementById(boardArray[r][c].id).className = "unvisited";
         boardArray[r][c].status = "unvisited";
       }
+      boardArray[r][c].distance = Infinity;
+      boardArray[r][c].totalDistance = Infinity;
     }
   }
+
+  closedList=[];
+  openList = [];
+  document.getElementById("visualize").disabled = false;
+  document.getElementById("visualize").innerHTML = "Visualize";
+  document.getElementById("visualize").className = "btn btn-outline-success my-2 my-sm-0";
+  document.getElementById("clearPath").disabled = true;
+  
 }
 
 function AStarSearch(){
@@ -78,10 +89,15 @@ function AStarSearch(){
       openList = openList.slice(1);
     }
   }
-  console.log(closedList)
+  console.log(closedList);
+  document.getElementById("visualize").disabled = true;
+  document.getElementById("visualize").innerHTML = "Clear path to visualize again";
+  document.getElementById("visualize").className = "btn btn-outline-danger my-2 my-sm-0";
+  document.getElementById("clearPath").disabled = false;
   startAnimation(closedList);
 
 }
+
 
 function startAnimation(closedList){
   for(let i = 1;i<closedList.length-1;i++){
