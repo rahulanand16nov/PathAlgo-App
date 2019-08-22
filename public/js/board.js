@@ -24,6 +24,17 @@ function initialize(h,w){
   eventListeners(height,width);
 }
 
+function clearPath(){
+  for(let r =0;r<height;r++){
+    for(let c =0;c<width;c++ ){
+      if(boardArray[r][c].status ===  "shortestPath" || boardArray[r][c].status === "visited"){
+        document.getElementById(boardArray[r][c].id).className = "unvisited";
+        boardArray[r][c].status = "unvisited";
+      }
+    }
+  }
+}
+
 function AStarSearch(){
   let startX = parseInt(startId.split('-')[1]);
   let startY = parseInt(startId.split('-')[0]);
@@ -74,6 +85,7 @@ function AStarSearch(){
 
 function startAnimation(closedList){
   for(let i = 1;i<closedList.length-1;i++){
+    closedList[i].status = "visited";
     document.getElementById(closedList[i].id).className="visited";
   }
   let shortestPathList = [];
@@ -84,6 +96,7 @@ function startAnimation(closedList){
   }
   shortestPathList = shortestPathList.reverse();
   for(let i = 0;i<shortestPathList.length-1;i++){
+    shortestPathList[i].status = "shortestPath";
     document.getElementById(shortestPathList[i].id).className="shortestPath";
   }
 }
